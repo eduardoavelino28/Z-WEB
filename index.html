@@ -3,171 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Z-WEB | Comunidade Oficial</title>
+    <title>Z-WEB | Oficial</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --bg: #0d1117;
-            --accent: #00d2ff;
-            --card: #161b22;
-            --text: #ffffff;
+        :root { 
+            --bg: #0a0c10; --card: #161b22; --accent: #00d2ff; --text: #f0f6fc; 
+            --danger: #ff4444; --warning: #ffcc00; --success: #2ea043; --border: #30363d;
         }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding-bottom: 70px;
-            overflow-x: hidden;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; padding-bottom: 80px; }
 
         /* HEADER */
-        header {
-            background: #161b22;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--accent);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        header { 
+            background: var(--card); padding: 15px; border-bottom: 2px solid var(--accent); 
+            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; 
+        }
+        .logo { font-weight: 800; color: var(--accent); font-size: 1.3rem; letter-spacing: 1px; }
+
+        /* CARROSSEL AUTOMÁTICO */
+        .slider { width: 100%; height: 200px; overflow: hidden; position: relative; border-bottom: 1px solid var(--border); }
+        .slides { display: flex; width: 300%; height: 100%; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slides img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* FEED ORGANIZADO */
+        #feed { padding: 15px; display: flex; flex-direction: column-reverse; gap: 20px; }
+        .card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); position: relative; animation: fadeIn 0.5s; }
+        .card img { width: 100%; max-height: 350px; object-fit: cover; border-bottom: 1px solid var(--border); }
+        .card-body { padding: 15px; }
+        .card-user { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 0.9rem; color: var(--accent); }
+        .verify-badge { color: var(--accent); font-size: 0.8rem; }
+        
+        /* BOTÃO APAGAR (MODO MODERAÇÃO) */
+        .del-btn { 
+            position: absolute; top: 10px; right: 10px; background: var(--danger); 
+            color: white; border: none; border-radius: 5px; padding: 8px; display: none; cursor: pointer; z-index: 10;
         }
 
-        .logo { font-weight: bold; font-size: 1.5rem; color: var(--accent); display: flex; align-items: center; gap: 10px; }
-        .nav-icons i { font-size: 1.2rem; margin-left: 15px; cursor: pointer; }
-
-        /* MENU LATERAL */
-        #side-menu {
-            position: fixed;
-            left: -250px;
-            top: 0;
-            width: 250px;
-            height: 100%;
-            background: var(--card);
-            transition: 0.3s;
-            z-index: 2000;
-            padding: 20px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+        /* PAINEL ADMIN (FULL SCREEN) */
+        #admin-panel { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--bg); z-index: 9999; display: none; padding: 20px; overflow-y: auto;
         }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--accent); padding-bottom: 10px; }
+        .admin-section { background: var(--card); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--border); }
+        
+        .input-style { width: 100%; padding: 12px; margin-bottom: 12px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 8px; font-size: 1rem; }
+        .btn-action { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
+        
+        /* BOTÕES DO PAINEL */
+        .btn-post { background: var(--accent); color: #000; }
+        .btn-warn { background: var(--warning); color: #000; }
+        .btn-mute { background: #6e7681; color: white; }
+        .btn-susp { background: orange; color: white; }
+        .btn-ban { background: var(--danger); color: white; }
+        .btn-verify { background: var(--success); color: white; }
 
-        #side-menu.active { left: 0; }
-        #side-menu ul { list-style: none; padding: 0; margin-top: 50px; }
-        #side-menu li { padding: 15px 0; border-bottom: 1px solid #30363d; cursor: pointer; }
-
-        /* SEÇÕES */
-        .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
-        .page.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .card {
-            background: var(--card);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #30363d;
+        /* NAVEGAÇÃO INFERIOR */
+        nav { 
+            position: fixed; bottom: 0; width: 100%; background: var(--card); 
+            display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid var(--border); z-index: 1000;
         }
+        .nav-item { text-align: center; color: #8b949e; font-size: 0.7rem; cursor: pointer; }
+        .nav-item i { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+        .nav-item.active { color: var(--accent); }
 
-        /* CHAT / DEBATE */
-        #chat-container { height: 400px; overflow-y: auto; background: #000; border-radius: 5px; padding: 10px; margin-bottom: 10px; }
-        .msg { margin-bottom: 10px; padding: 8px; border-radius: 5px; background: #30363d; font-size: 0.9rem; }
-        .msg b { color: var(--accent); }
-
-        .input-group { display: flex; gap: 10px; }
-        input, textarea { width: 100%; padding: 10px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 5px; }
-        button { background: var(--accent); color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-
-        /* NAV INFERIOR */
-        nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: #161b22;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            border-top: 1px solid #30363d;
-        }
-
-        nav div { text-align: center; font-size: 0.8rem; cursor: pointer; color: #8b949e; }
-        nav div.active { color: var(--accent); }
-        nav i { font-size: 1.2rem; display: block; margin-bottom: 3px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo" onclick="toggleMenu()"><i class="fas fa-bars"></i> Z-WEB</div>
-        <div class="nav-icons">
-            <i class="fas fa-search" onclick="alert('Busca em breve...')"></i>
-        </div>
+        <div class="logo">Z-WEB</div>
+        <i class="fas fa-shield-alt" onclick="openAdmin()" style="color: #30363d; font-size: 1.4rem;"></i>
     </header>
 
-    <div id="side-menu">
-        <i class="fas fa-times" onclick="toggleMenu()" style="float:right; font-size: 1.5rem;"></i>
-        <ul>
-            <li><i class="fas fa-book"></i> Meus Contos</li>
-            <li><i class="fas fa-star"></i> Favoritos</li>
-            <li><i class="fas fa-gavel"></i> Regras da Corregedoria</li>
-            <li><i class="fas fa-user-shield"></i> Painel Admin (Ban)</li>
-        </ul>
+    <div class="slider">
+        <div class="slides" id="main-slider">
+            <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=800" alt="Slide 1">
+            <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800" alt="Slide 2">
+            <img src="https://images.unsplash.com/photo-1557683316-973673baf926?w=800" alt="Slide 3">
+        </div>
     </div>
 
-    <div id="home" class="page active">
-        <h2 style="color: var(--accent);">🔥 Tendências</h2>
+    <main id="feed">
         <div class="card">
-            <h3>Kage no Enjin: O Despertar</h3>
-            <p>O protagonista enfrenta o primeiro desafio no submundo...</p>
-            <button onclick="alert('Favoritado!')"><i class="far fa-star"></i> Salvar</button>
+            <div class="card-body">
+                <div class="card-user"><i class="fas fa-check-circle"></i> <b>Sistema Z-WEB</b></div>
+                <p>Bem-vindo, Fundador Eduardo. Seu painel de controle está pronto para a gestão 2026/2027.</p>
+            </div>
         </div>
-    </div>
+    </main>
 
-    <div id="debate" class="page">
-        <h2>💬 Debate em Tempo Real</h2>
-        <div id="chat-container">
-            <div class="msg"><b>Sistema:</b> Bem-vindo ao debate da Z-WEB!</div>
+    <div id="admin-panel">
+        <div class="admin-header">
+            <h2><i class="fas fa-gavel"></i> Corregedoria</h2>
+            <i class="fas fa-times" onclick="closeAdmin()" style="font-size: 1.8rem;"></i>
         </div>
-        <div class="input-group">
-            <input type="text" placeholder="Escreva sua mensagem...">
-            <button>Enviar</button>
-        </div>
-    </div>
 
-    <div id="perfil" class="page">
-        <h2>👤 Meu Perfil</h2>
-        <div class="card" id="login-area">
-            <p>Você precisa estar logado para postar e ganhar XP.</p>
-            <input type="email" placeholder="Seu e-mail" style="margin-bottom: 10px;"><br>
-            <input type="password" placeholder="Sua senha" style="margin-bottom: 10px;"><br>
-            <button onclick="alert('Em breve: Conexão com Firebase!')">Criar Conta / Entrar</button>
+        <div class="admin-section">
+            <h3>📝 Nova Publicação Oficial</h3>
+            <input type="text" id="post-url" class="input-style" placeholder="Link da Imagem (URL)">
+            <textarea id="post-desc" class="input-style" placeholder="Texto da publicação..." rows="3"></textarea>
+            <button class="btn-action btn-post" onclick="publishPost()">LANÇAR NA REDE</button>
         </div>
+
+        <div class="admin-section">
+            <h3>👥 Gestão de Membros</h3>
+            <p style="margin-bottom: 10px; font-size: 0.8rem; color: #8b949e;">Membro Selecionado: <b>Usuário_Demonstração</b></p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button class="btn-action btn-warn" onclick="alert('Advertência aplicada!')">ADVERTIR</button>
+                <button class="btn-action btn-mute" onclick="alert('Mute aplicado!')">MUTAR</button>
+                <button class="btn-action btn-susp" onclick="alert('Suspensão aplicada!')">SUSPENDER</button>
+                <button class="btn-action btn-ban" onclick="confirm('CONFIRMAR BANIMENTO PERMANENTE?')">BANIR</button>
+            </div>
+            <button class="btn-action btn-verify" onclick="alert('Selo de Verificado concedido!')">CONCEDER SELO OFICIAL</button>
+        </div>
+
+        <button onclick="toggleModMode()" style="width: 100%; background: #30363d; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold;">ATIVAR MODO APAGAR POSTS</button>
     </div>
 
     <nav>
-        <div onclick="showPage('home')" id="btn-home" class="active"><i class="fas fa-home"></i>Início</div>
-        <div onclick="showPage('debate')" id="btn-debate"><i class="fas fa-comments"></i>Debate</div>
-        <div onclick="showPage('perfil')" id="btn-perfil"><i class="fas fa-user"></i>Perfil</div>
+        <div class="nav-item active" onclick="location.reload()">
+            <i class="fas fa-home"></i>Início
+        </div>
+        <div class="nav-item" onclick="alert('O Chat em tempo real será ativado via Firebase.')">
+            <i class="fas fa-comments"></i>Debate
+        </div>
+        <div class="nav-item" onclick="openAdmin()">
+            <i class="fas fa-tools"></i>Painel
+        </div>
     </nav>
 
     <script>
-        function toggleMenu() {
-            document.getElementById('side-menu').classList.toggle('active');
+        // CONTROLE DO SLIDER
+        let currentSlide = 0;
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % 3;
+            document.getElementById('main-slider').style.transform = `translateX(-${currentSlide * 100}%)`;
+        }, 4000);
+
+        // ACESSO AO PAINEL
+        function openAdmin() {
+            const senha = prompt("Acesso do Fundador:");
+            if(senha === "avelino2026") {
+                document.getElementById('admin-panel').style.display = "block";
+            } else {
+                alert("Senha inválida!");
+            }
         }
 
-        function showPage(pageId) {
-            // Esconde todas as páginas
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Mostra a escolhida
-            document.getElementById(pageId).classList.add('active');
-            
-            // Atualiza ícones da nav
-            document.querySelectorAll('nav div').forEach(d => d.classList.remove('active'));
-            document.getElementById('btn-' + pageId).classList.add('active');
+        function closeAdmin() {
+            document.getElementById('admin-panel').style.display = "none";
+        }
 
-            // Fecha menu lateral se estiver aberto
-            document.getElementById('side-menu').classList.remove('active');
+        // SISTEMA DE POSTAGEM
+        function publishPost() {
+            const url = document.getElementById('post-url').value;
+            const desc = document.getElementById('post-desc').value;
+            if(!desc) return alert("O texto é obrigatório!");
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <button class="del-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
+                ${url ? `<img src="${url}">` : ''}
+                <div class="card-body">
+                    <div class="card-user"><i class="fas fa-check-circle"></i> <b>Eduardo Avelino</b> <span class="verify-badge">(Fundador)</span></div>
+                    <p>${desc}</p>
+                </div>
+            `;
+            document.getElementById('feed').appendChild(card);
+            
+            // Limpar e fechar
+            document.getElementById('post-url').value = "";
+            document.getElementById('post-desc').value = "";
+            closeAdmin();
+        }
+
+        // MODO MODERAÇÃO (APAGAR)
+        let modMode = false;
+        function toggleModMode() {
+            modMode = !modMode;
+            const btns = document.querySelectorAll('.del-btn');
+            btns.forEach(b => b.style.display = modMode ? 'block' : 'none');
+            alert(modMode ? "Modo Moderação: ON" : "Modo Moderação: OFF");
+            if(modMode) closeAdmin();
         }
     </script>
 </body>
