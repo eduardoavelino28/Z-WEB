@@ -3,91 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Z-WEB: A Corregedoria de Animes e Fantasia do Eduardo Avelino. Debates, tendências e comunidade.">
-    <title>Z-WEB | Corregedoria de Animes</title>
+    <title>Z-WEB | Comunidade Oficial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #0b1016; color: #fff; padding-bottom: 80px; }
+        :root {
+            --bg: #0d1117;
+            --accent: #00d2ff;
+            --card: #161b22;
+            --text: #ffffff;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding-bottom: 70px;
+            overflow-x: hidden;
+        }
 
         /* HEADER */
         header {
-            background: #161b22; padding: 15px; display: flex;
-            justify-content: space-between; align-items: center;
-            border-bottom: 2px solid #00d2ff; position: sticky; top: 0; z-index: 100;
+            background: #161b22;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--accent);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .logo-z { background: #00d2ff; color: #0b1016; padding: 2px 8px; font-weight: 900; border-radius: 4px; margin-right: 5px; }
 
-        /* PAGINAÇÃO */
-        .page { display: none; padding: 20px; animation: slideUp 0.3s ease; }
+        .logo { font-weight: bold; font-size: 1.5rem; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+        .nav-icons i { font-size: 1.2rem; margin-left: 15px; cursor: pointer; }
+
+        /* MENU LATERAL */
+        #side-menu {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background: var(--card);
+            transition: 0.3s;
+            z-index: 2000;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+        }
+
+        #side-menu.active { left: 0; }
+        #side-menu ul { list-style: none; padding: 0; margin-top: 50px; }
+        #side-menu li { padding: 15px 0; border-bottom: 1px solid #30363d; cursor: pointer; }
+
+        /* SEÇÕES */
+        .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
         .page.active { display: block; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* DEBATE STYLE */
-        .post { background: #1c232d; border-radius: 12px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #00d2ff; }
-        .btn-share { background: #00d2ff; border: none; padding: 8px 15px; border-radius: 5px; color: #0b1016; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* PERFIL STYLE */
-        .rank-card { background: linear-gradient(45deg, #161b22, #00d2ff22); padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #00d2ff; }
-        .xp-bar { width: 100%; height: 10px; background: #333; border-radius: 5px; margin-top: 10px; overflow: hidden; }
-        .xp-fill { width: 45%; height: 100%; background: #00d2ff; }
+        .card {
+            background: var(--card);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #30363d;
+        }
 
-        /* NAV */
-        nav { position: fixed; bottom: 0; width: 100%; background: #161b22; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #333; }
-        .nav-item { text-align: center; font-size: 11px; color: #888; flex: 1; cursor: pointer; }
-        .nav-item.active { color: #00d2ff; font-weight: bold; }
+        /* CHAT / DEBATE */
+        #chat-container { height: 400px; overflow-y: auto; background: #000; border-radius: 5px; padding: 10px; margin-bottom: 10px; }
+        .msg { margin-bottom: 10px; padding: 8px; border-radius: 5px; background: #30363d; font-size: 0.9rem; }
+        .msg b { color: var(--accent); }
+
+        .input-group { display: flex; gap: 10px; }
+        input, textarea { width: 100%; padding: 10px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 5px; }
+        button { background: var(--accent); color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+
+        /* NAV INFERIOR */
+        nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #161b22;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #30363d;
+        }
+
+        nav div { text-align: center; font-size: 0.8rem; cursor: pointer; color: #8b949e; }
+        nav div.active { color: var(--accent); }
+        nav i { font-size: 1.2rem; display: block; margin-bottom: 3px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div style="color:#00d2ff; font-size:24px;">☰</div>
-        <div style="font-weight:900; font-size:20px;"><span class="logo-z">Z</span>WEB</div>
-        <div style="color:#00d2ff; font-size:24px;">🔍</div>
+        <div class="logo" onclick="toggleMenu()"><i class="fas fa-bars"></i> Z-WEB</div>
+        <div class="nav-icons">
+            <i class="fas fa-search" onclick="alert('Busca em breve...')"></i>
+        </div>
     </header>
 
+    <div id="side-menu">
+        <i class="fas fa-times" onclick="toggleMenu()" style="float:right; font-size: 1.5rem;"></i>
+        <ul>
+            <li><i class="fas fa-book"></i> Meus Contos</li>
+            <li><i class="fas fa-star"></i> Favoritos</li>
+            <li><i class="fas fa-gavel"></i> Regras da Corregedoria</li>
+            <li><i class="fas fa-user-shield"></i> Painel Admin (Ban)</li>
+        </ul>
+    </div>
+
     <div id="home" class="page active">
-        <h3 style="color:#00d2ff; margin-bottom:15px;">🔥 Tendências de Hoje</h3>
-        <div style="width:100%; height:180px; background:url('https://images.alphacoders.com/134/1344840.png') center/cover; border-radius:10px;"></div>
-        <p style="margin-top:10px; color:#888;">Novos capítulos de aventuras épicas comentados pela comunidade.</p>
+        <h2 style="color: var(--accent);">🔥 Tendências</h2>
+        <div class="card">
+            <h3>Kage no Enjin: O Despertar</h3>
+            <p>O protagonista enfrenta o primeiro desafio no submundo...</p>
+            <button onclick="alert('Favoritado!')"><i class="far fa-star"></i> Salvar</button>
+        </div>
     </div>
 
     <div id="debate" class="page">
-        <h2 style="margin-bottom:20px;">💬 Mural da Corregedoria</h2>
-        <div class="post">
-            <strong>Eduardo Avelino</strong> <small style="color:#00d2ff;">• Autor</small>
-            <p style="margin-top:10px;">Qual foi o plot twist que mais te chocou em animes de aventura esse ano?</p>
-            <button class="btn-share" onclick="alert('Link copiado! Mande para seus grupos.')">🔗 Compartilhar Debate</button>
+        <h2>💬 Debate em Tempo Real</h2>
+        <div id="chat-container">
+            <div class="msg"><b>Sistema:</b> Bem-vindo ao debate da Z-WEB!</div>
+        </div>
+        <div class="input-group">
+            <input type="text" placeholder="Escreva sua mensagem...">
+            <button>Enviar</button>
         </div>
     </div>
 
     <div id="perfil" class="page">
-        <div class="rank-card">
-            <div style="font-size:50px;">👤</div>
-            <h2 id="userName">Visitante_88</h2>
-            <p style="color:#00d2ff; font-weight:bold;">Nível 1 - Recruta</p>
-            <div class="xp-bar"><div class="xp-fill"></div></div>
-            <p style="font-size:12px; color:#888; margin-top:5px;">XP: 450 / 1000</p>
+        <h2>👤 Meu Perfil</h2>
+        <div class="card" id="login-area">
+            <p>Você precisa estar logado para postar e ganhar XP.</p>
+            <input type="email" placeholder="Seu e-mail" style="margin-bottom: 10px;"><br>
+            <input type="password" placeholder="Sua senha" style="margin-bottom: 10px;"><br>
+            <button onclick="alert('Em breve: Conexão com Firebase!')">Criar Conta / Entrar</button>
         </div>
-        <button onclick="changeName()" style="width:100%; margin-top:15px; padding:10px; background:#1c232d; border:1px solid #333; color:#fff; border-radius:5px;">Mudar Nome de Usuário</button>
     </div>
 
     <nav>
-        <div class="nav-item active" id="n-home" onclick="navTo('home')">🏠<br>Início</div>
-        <div class="nav-item" id="n-debate" onclick="navTo('debate')">💬<br>Debate</div>
-        <div class="nav-item" id="n-perfil" onclick="navTo('perfil')">👤<br>Perfil</div>
+        <div onclick="showPage('home')" id="btn-home" class="active"><i class="fas fa-home"></i>Início</div>
+        <div onclick="showPage('debate')" id="btn-debate"><i class="fas fa-comments"></i>Debate</div>
+        <div onclick="showPage('perfil')" id="btn-perfil"><i class="fas fa-user"></i>Perfil</div>
     </nav>
 
     <script>
-        function navTo(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.getElementById('n-' + id).classList.add('active');
+        function toggleMenu() {
+            document.getElementById('side-menu').classList.toggle('active');
         }
 
-        function changeName() {
-            let novoNome = prompt("Digite seu novo nome:");
-            if(novoNome) document.getElementById('userName').innerText = novoNome;
+        function showPage(pageId) {
+            // Esconde todas as páginas
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Mostra a escolhida
+            document.getElementById(pageId).classList.add('active');
+            
+            // Atualiza ícones da nav
+            document.querySelectorAll('nav div').forEach(d => d.classList.remove('active'));
+            document.getElementById('btn-' + pageId).classList.add('active');
+
+            // Fecha menu lateral se estiver aberto
+            document.getElementById('side-menu').classList.remove('active');
         }
     </script>
 </body>
