@@ -3,53 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Z-WEB | Oficial</title>
+    <title>Z-WEB | Anime Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --bg: #050505; --card: #121212; --accent: #00d2ff; --text: #ffffff; --border: #222; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: var(--bg); color: var(--text); overflow-x: hidden; padding-bottom: 70px; }
 
-        /* HEADER */
         header { background: var(--card); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-weight: bold; color: var(--accent); font-size: 1.4rem; }
+        .logo { font-weight: bold; color: var(--accent); font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
 
-        /* MENU LATERAL - CORREÇÃO DEFINITIVA */
+        /* BUSCA */
+        .search-container { padding: 10px 15px; background: var(--bg); }
+        .search-box { width: 100%; padding: 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--card); color: white; display: flex; align-items: center; gap: 10px; }
+        .search-box input { background: transparent; border: none; color: white; width: 100%; outline: none; }
+
+        /* MENU LATERAL */
         #side-menu { position: fixed; left: -100%; top: 0; width: 280px; height: 100%; background: var(--card); transition: 0.3s; z-index: 2000; padding: 25px; border-right: 2px solid var(--accent); }
         #side-menu.active { left: 0; }
         .overlay { position: fixed; display: none; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1500; }
         .overlay.active { display: block; }
-        .menu-item { padding: 15px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; font-size: 1.1rem; cursor: pointer; }
+        .menu-item { padding: 15px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; font-size: 1.1rem; }
 
-        /* CARROSSEL */
-        .slider { width: 100%; height: 200px; overflow: hidden; background: #000; }
-        .slides { display: flex; width: 300%; height: 100%; transition: 0.5s; }
-        .slides img { width: 100%; height: 100%; object-fit: cover; }
+        /* CARROSSEL COM IMAGENS REAIS */
+        .slider { width: 100%; height: 210px; overflow: hidden; position: relative; margin-top: 5px; }
+        .slides { display: flex; width: 300%; height: 100%; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slides img { width: 100.1%; height: 100%; object-fit: cover; }
 
-        /* FEED E CARDS */
-        .page { display: none; padding: 15px; animation: fadeIn 0.4s; }
+        /* PAGINAÇÃO */
+        .page { display: none; padding: 15px; animation: fadeIn 0.3s; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
-        .card img { width: 100%; max-height: 300px; object-fit: cover; }
-        .card-content { padding: 15px; }
-        .card-title { font-weight: bold; color: var(--accent); margin-bottom: 8px; font-size: 1.2rem; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; overflow: hidden; position: relative; }
+        .fav-btn { position: absolute; top: 10px; right: 10px; color: var(--accent); background: rgba(0,0,0,0.5); padding: 8px; border-radius: 50%; }
 
-        /* LOGIN E ADMIN */
-        .auth-box { text-align: center; padding: 20px; }
-        .btn-auth { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .google { background: white; color: black; }
-        .fb { background: #1877f2; color: white; }
-        
-        #admin-panel { display: none; margin-top: 20px; border-top: 2px dashed var(--accent); padding-top: 20px; }
-        .input-admin { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); color: white; border-radius: 6px; margin-bottom: 10px; }
+        /* BOTÕES LOGIN */
+        .btn-auth { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; border: none; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .google { background: #fff; color: #000; }
+        .fb { background: #1877f2; color: #fff; }
 
-        /* NAV INFERIOR */
         nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; border-top: 1px solid var(--border); padding: 10px 0; z-index: 1000; }
-        .nav-link { flex: 1; text-align: center; color: #666; font-size: 0.8rem; }
+        .nav-link { flex: 1; text-align: center; color: #555; font-size: 0.75rem; }
         .nav-link.active { color: var(--accent); }
-        .nav-link i { font-size: 1.4rem; display: block; margin-bottom: 3px; }
+        .nav-link i { font-size: 1.3rem; display: block; margin-bottom: 3px; }
+        
+        #admin-panel { display: none; background: #1a1a1a; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px dashed var(--accent); }
     </style>
 </head>
 <body>
@@ -57,65 +56,92 @@
 <div class="overlay" id="overlay" onclick="closeMenu()"></div>
 
 <header>
-    <div onclick="openMenu()"><i class="fas fa-bars"></i> Z-WEB</div>
-    <i class="fas fa-shield-alt" onclick="checkAdmin()"></i>
+    <div class="logo" onclick="openMenu()"><i class="fas fa-bars"></i> Z-WEB</div>
+    <div style="display: flex; gap: 15px;">
+        <i class="fas fa-search" onclick="changePage('home')"></i>
+        <i class="fas fa-shield-alt" onclick="checkAdmin()"></i>
+    </div>
 </header>
 
 <div id="side-menu">
+    <h2 style="color:var(--accent); margin-bottom: 20px;">Z-Menu</h2>
     <div class="menu-item" onclick="changePage('home')"><i class="fas fa-home"></i> Início</div>
-    <div class="menu-item" onclick="alert('Regras da Corregedoria v1.0')"><i class="fas fa-gavel"></i> Corregedoria</div>
-    <div class="menu-item" onclick="changePage('perfil')"><i class="fas fa-user"></i> Meu Perfil</div>
+    <div class="menu-item" onclick="changePage('favs')"><i class="fas fa-heart"></i> Meus Favoritos</div>
+    <div class="menu-item" onclick="verCorregedoria()"><i class="fas fa-gavel"></i> Corregedoria</div>
+    <div class="menu-item" onclick="changePage('perfil')"><i class="fas fa-user-shield"></i> Área do Fundador</div>
 </div>
 
 <main id="home" class="page active">
-    <div class="slider">
-        <div class="slides" id="slider">
-            <img src="https://via.placeholder.com/800x400/000/00d2ff?text=Destaque+Solo+Leveling">
-            <img src="https://via.placeholder.com/800x400/000/00d2ff?text=Destaque+Jujutsu+Kaisen">
-            <img src="https://via.placeholder.com/800x400/000/00d2ff?text=Kage+no+Enjin">
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Buscar animes, mangás...">
         </div>
     </div>
-    <h3 style="margin: 20px 0 10px;">🔥 Lançamentos</h3>
+    
+    <div class="slider">
+        <div class="slides" id="slider">
+            <img src="https://images4.alphacoders.com/134/1340156.png" alt="Solo Leveling">
+            <img src="https://wallpapercave.com/wp/wp12076049.jpg" alt="Jujutsu Kaisen">
+            <img src="https://images7.alphacoders.com/131/1314811.jpeg" alt="One Piece">
+        </div>
+    </div>
+
+    <h3 style="margin: 20px 0 15px; border-left: 4px solid var(--accent); padding-left: 10px;">Últimas Atualizações</h3>
     <div id="feed">
         <div class="card">
-            <div class="card-content">
-                <div class="card-title">Z-WEB 2026</div>
-                <p>O portal oficial de animes está online. Eduardo Avelino no comando.</p>
+            <i class="far fa-heart fav-btn" onclick="toggleFav(this)"></i>
+            <img src="https://m.media-amazon.com/images/I/81shR8n-9pL._AC_UF1000,1000_QL80_.jpg" style="width:100%; height:150px; object-fit:cover;">
+            <div style="padding:15px;">
+                <div style="color:var(--accent); font-weight:bold;">Z-WEB NEWS</div>
+                <p style="font-size:0.9rem; color:#ccc;">Bem-vindo ao novo portal. O sistema de login será integrado ao Firebase em breve.</p>
             </div>
         </div>
     </div>
 </main>
 
+<main id="favs" class="page">
+    <h2 style="margin-bottom: 20px;"><i class="fas fa-heart" style="color:red"></i> Meus Favoritos</h2>
+    <div id="lista-favoritos" style="color:#666; text-align:center; padding:50px 0;">
+        Sua lista de favoritos está vazia.
+    </div>
+</main>
+
 <main id="debate" class="page">
-    <div class="card" style="text-align:center; padding: 40px 20px;">
-        <i class="fas fa-comments" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
-        <h3>Debate em Tempo Real</h3>
-        <p style="color:#888; margin-top:10px;">Aba bloqueada. Faça login para participar das discussões.</p>
+    <div style="text-align:center; padding: 50px 20px;">
+        <i class="fas fa-lock" style="font-size: 3rem; color: var(--accent); margin-bottom: 20px;"></i>
+        <h2>Chat Restrito</h2>
+        <p style="color:#888; margin: 15px 0;">Para evitar spam e manter a ordem da Corregedoria, o chat em tempo real exige login oficial.</p>
+        <button class="btn-auth google" onclick="loginAlert()">Entrar para Debater</button>
     </div>
 </main>
 
 <main id="perfil" class="page">
-    <div class="card auth-box">
-        <h3>Acessar Z-WEB</h3>
-        <button class="btn-auth google"><i class="fab fa-google"></i> Entrar com Google</button>
-        <button class="btn-auth fb"><i class="fab fa-facebook"></i> Entrar com Facebook</button>
+    <div class="card" style="padding:20px; text-align:center;">
+        <div style="width:80px; height:80px; background:#222; border-radius:50%; margin: 0 auto 15px; display:flex; align-items:center; justify-content:center;">
+            <i class="fas fa-user fa-2x"></i>
+        </div>
+        <h3>Visitante</h3>
+        <button class="btn-auth google" onclick="loginAlert()"><i class="fab fa-google"></i> Entrar com Google</button>
+        <button class="btn-auth fb" onclick="loginAlert()"><i class="fab fa-facebook"></i> Entrar com Facebook</button>
+
         <div id="admin-panel">
-            <h4 style="color:var(--accent)">Painel do Fundador</h4>
-            <input type="text" id="postImg" class="input-admin" placeholder="URL da Imagem">
-            <textarea id="postTxt" class="input-admin" placeholder="Texto da notícia..." rows="3"></textarea>
-            <button onclick="postar()" style="background:var(--accent); color:black; width:100%; padding:10px; border:none; font-weight:bold; border-radius:6px;">PUBLICAR AGORA</button>
+            <h4 style="color:var(--accent); margin-bottom:10px;">Postar como Fundador</h4>
+            <input type="text" id="postImg" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #333; color:white;" placeholder="Link da imagem do anime">
+            <textarea id="postTxt" style="width:100%; padding:10px; background:#000; border:1px solid #333; color:white;" placeholder="O que está acontecendo no mundo otaku?" rows="3"></textarea>
+            <button onclick="postar()" style="width:100%; padding:12px; background:var(--accent); color:#000; border:none; font-weight:bold; border-radius:5px; margin-top:10px;">PUBLICAR</button>
         </div>
     </div>
 </main>
 
 <nav>
-    <div class="nav-link active" id="n-home" onclick="changePage('home')"><i class="fas fa-home"></i>Início</div>
-    <div class="nav-link" id="n-debate" onclick="changePage('debate')"><i class="fas fa-comment-dots"></i>Debate</div>
+    <div class="nav-link active" id="n-home" onclick="changePage('home')"><i class="fas fa-th-large"></i>Início</div>
+    <div class="nav-link" id="n-favs" onclick="changePage('favs')"><i class="fas fa-heart"></i>Favoritos</div>
+    <div class="nav-link" id="n-debate" onclick="changePage('debate')"><i class="fas fa-comments"></i>Debate</div>
     <div class="nav-link" id="n-perfil" onclick="changePage('perfil')"><i class="fas fa-user-circle"></i>Perfil</div>
 </nav>
 
 <script>
-    // Menu e Navegação
     function openMenu() { document.getElementById('side-menu').classList.add('active'); document.getElementById('overlay').classList.add('active'); }
     function closeMenu() { document.getElementById('side-menu').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); }
     
@@ -124,20 +150,36 @@
         document.getElementById(id).classList.add('active');
         document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
         document.getElementById('n-'+id).classList.add('active');
-        closeMenu(); window.scrollTo(0,0);
+        closeMenu();
     }
 
-    // Carrossel
+    // Slider automático
     let s = 0;
-    setInterval(() => { s++; if(s > 2) s = 0; document.getElementById('slider').style.transform = `translateX(-${s * 100}%)`; }, 4000);
+    setInterval(() => { 
+        s++; if(s > 2) s = 0; 
+        document.getElementById('slider').style.transform = `translateX(-${s * 100}%)`; 
+    }, 4000);
 
-    // Admin
+    function verCorregedoria() {
+        alert("🛡️ CORREGEDORIA Z-WEB\n\nStatus: Ativa\nRegras: Proibido spam, spoilers sem aviso e desrespeito.\n\nFundador: Eduardo Avelino");
+    }
+
+    function loginAlert() {
+        alert("⚠️ Conectando ao Firebase...\n\nO sistema de autenticação real requer a chave API do Google. Eduardo, para ativar isso, precisamos configurar seu Firebase Console.");
+    }
+
+    function toggleFav(el) {
+        el.classList.toggle('fas');
+        el.classList.toggle('far');
+        alert("Adicionado aos Favoritos!");
+    }
+
     function checkAdmin() {
-        let p = prompt("Chave do Fundador:");
+        let p = prompt("Código de Acesso do Fundador:");
         if(p === "avelino2026") {
             changePage('perfil');
             document.getElementById('admin-panel').style.display = 'block';
-            alert("Painel Corregedoria Ativado!");
+            alert("Painel Administrativo Desbloqueado!");
         }
     }
 
@@ -145,13 +187,14 @@
         const img = document.getElementById('postImg').value;
         const txt = document.getElementById('postTxt').value;
         if(!txt) return;
-        const feed = document.getElementById('feed');
         const card = document.createElement('div');
         card.className = 'card';
-        card.innerHTML = `${img ? `<img src="${img}">` : ''}<div class="card-content"><div class="card-title">Notícia</div><p>${txt}</p></div>`;
-        feed.prepend(card); // Post novo no topo
+        card.innerHTML = `<i class="far fa-heart fav-btn"></i>${img ? `<img src="${img}" style="width:100%; height:150px; object-fit:cover;">` : ''}<div style="padding:15px;"><div style="color:var(--accent); font-weight:bold;">NOVO POST</div><p style="font-size:0.9rem; color:#ccc;">${txt}</p></div>`;
+        document.getElementById('feed').prepend(card);
+        alert("Postado com sucesso!");
         document.getElementById('postImg').value = ""; document.getElementById('postTxt').value = "";
     }
 </script>
 </body>
-</html>
+            </html>
+    
