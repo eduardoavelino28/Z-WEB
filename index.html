@@ -6,114 +6,152 @@
     <title>Z-WEB | Oficial</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #0a0c10; --card: #161b22; --accent: #00d2ff; --text: #f0f6fc; --border: #30363d; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); font-family: sans-serif; overflow-x: hidden; padding-bottom: 70px; }
+        :root { --bg: #050505; --card: #121212; --accent: #00d2ff; --text: #ffffff; --border: #222; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; padding-bottom: 70px; }
 
+        /* HEADER */
         header { background: var(--card); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 1000; }
-        
-        /* MENU LATERAL CORRIGIDO */
-        #side-menu { position: fixed; left: -100%; top: 0; width: 80%; height: 100%; background: var(--card); transition: 0.3s; z-index: 2000; padding: 20px; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
+        .logo { font-weight: bold; color: var(--accent); font-size: 1.4rem; }
+
+        /* MENU LATERAL - CORREÇÃO DEFINITIVA */
+        #side-menu { position: fixed; left: -100%; top: 0; width: 280px; height: 100%; background: var(--card); transition: 0.3s; z-index: 2000; padding: 25px; border-right: 2px solid var(--accent); }
         #side-menu.active { left: 0; }
-        .overlay { position: fixed; display: none; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1500; }
+        .overlay { position: fixed; display: none; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1500; }
         .overlay.active { display: block; }
+        .menu-item { padding: 15px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; font-size: 1.1rem; cursor: pointer; }
 
-        /* SEÇÕES */
-        .page { display: none; padding: 15px; }
+        /* CARROSSEL */
+        .slider { width: 100%; height: 200px; overflow: hidden; background: #000; }
+        .slides { display: flex; width: 300%; height: 100%; transition: 0.5s; }
+        .slides img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* FEED E CARDS */
+        .page { display: none; padding: 15px; animation: fadeIn 0.4s; }
         .page.active { display: block; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
+        .card img { width: 100%; max-height: 300px; object-fit: cover; }
+        .card-content { padding: 15px; }
+        .card-title { font-weight: bold; color: var(--accent); margin-bottom: 8px; font-size: 1.2rem; }
 
-        /* LOGIN PROFISSIONAL */
-        .auth-btn { width: 100%; padding: 12px; margin-bottom: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-google { background: #ffffff; color: #000; }
-        .btn-fb { background: #1877f2; color: #fff; }
+        /* LOGIN E ADMIN */
+        .auth-box { text-align: center; padding: 20px; }
+        .btn-auth { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .google { background: white; color: black; }
+        .fb { background: #1877f2; color: white; }
+        
+        #admin-panel { display: none; margin-top: 20px; border-top: 2px dashed var(--accent); padding-top: 20px; }
+        .input-admin { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); color: white; border-radius: 6px; margin-bottom: 10px; }
 
-        /* NAVEGAÇÃO INFERIOR */
-        nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; padding: 10px 0; border-top: 1px solid var(--border); z-index: 1000; }
-        .nav-item { flex: 1; text-align: center; color: #8b949e; font-size: 0.7rem; }
-        .nav-item.active { color: var(--accent); }
-        .nav-item i { font-size: 1.3rem; display: block; margin-bottom: 2px; }
-
-        /* ADMIN */
-        #admin-box { display: none; margin-top: 20px; border-top: 1px solid var(--accent); padding-top: 15px; }
+        /* NAV INFERIOR */
+        nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; border-top: 1px solid var(--border); padding: 10px 0; z-index: 1000; }
+        .nav-link { flex: 1; text-align: center; color: #666; font-size: 0.8rem; }
+        .nav-link.active { color: var(--accent); }
+        .nav-link i { font-size: 1.4rem; display: block; margin-bottom: 3px; }
     </style>
 </head>
 <body>
 
-<div class="overlay" onclick="toggleMenu()"></div>
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
 
 <header>
-    <div onclick="toggleMenu()"><i class="fas fa-bars"></i> Z-WEB</div>
-    <i class="fas fa-shield-alt" onclick="acessoDono()"></i>
+    <div onclick="openMenu()"><i class="fas fa-bars"></i> Z-WEB</div>
+    <i class="fas fa-shield-alt" onclick="checkAdmin()"></i>
 </header>
 
 <div id="side-menu">
-    <h2 style="color:var(--accent)">Menu Z-WEB</h2>
-    <div style="margin-top:20px">
-        <p onclick="showPage('home')"><i class="fas fa-home"></i> Início</p><br>
-        <p onclick="alert('Regras da Corregedoria em breve')"><i class="fas fa-gavel"></i> Corregedoria</p>
-    </div>
+    <div class="menu-item" onclick="changePage('home')"><i class="fas fa-home"></i> Início</div>
+    <div class="menu-item" onclick="alert('Regras da Corregedoria v1.0')"><i class="fas fa-gavel"></i> Corregedoria</div>
+    <div class="menu-item" onclick="changePage('perfil')"><i class="fas fa-user"></i> Meu Perfil</div>
 </div>
 
 <main id="home" class="page active">
-    <h3>🔥 Tendências</h3>
-    <div class="card">
-        <h4>Kage no Enjin</h4>
-        <p>O império começa aqui.</p>
+    <div class="slider">
+        <div class="slides" id="slider">
+            <img src="https://via.placeholder.com/800x400/000/00d2ff?text=Destaque+Solo+Leveling">
+            <img src="https://via.placeholder.com/800x400/000/00d2ff?text=Destaque+Jujutsu+Kaisen">
+            <img src="https://via.placeholder.com/800x400/000/00d2ff?text=Kage+no+Enjin">
+        </div>
+    </div>
+    <h3 style="margin: 20px 0 10px;">🔥 Lançamentos</h3>
+    <div id="feed">
+        <div class="card">
+            <div class="card-content">
+                <div class="card-title">Z-WEB 2026</div>
+                <p>O portal oficial de animes está online. Eduardo Avelino no comando.</p>
+            </div>
+        </div>
     </div>
 </main>
 
 <main id="debate" class="page">
-    <h3>💬 Debate</h3>
-    <div class="card" id="chat-box">Login necessário para debater.</div>
+    <div class="card" style="text-align:center; padding: 40px 20px;">
+        <i class="fas fa-comments" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
+        <h3>Debate em Tempo Real</h3>
+        <p style="color:#888; margin-top:10px;">Aba bloqueada. Faça login para participar das discussões.</p>
+    </div>
 </main>
 
 <main id="perfil" class="page">
-    <h3>👤 Acesso</h3>
-    <div class="card">
-        <button class="auth-btn btn-google"><i class="fab fa-google"></i> Entrar com Google</button>
-        <button class="auth-btn btn-fb"><i class="fab fa-facebook"></i> Entrar com Facebook</button>
-        <hr style="border:0; border-top:1px solid #30363d; margin:15px 0;">
-        <input type="email" placeholder="E-mail" style="width:100%; padding:10px; background:#000; border:1px solid #333; color:#fff; margin-bottom:10px;">
-        <button class="auth-btn" style="background:var(--accent); color:#000;">Criar Conta</button>
-    </div>
-
-    <div id="admin-box">
-        <h4>Painel do Dono</h4>
-        <textarea id="p-text" placeholder="Texto da postagem" style="width:100%; height:80px; margin-bottom:10px;"></textarea>
-        <button onclick="alert('Postagem enviada!')" style="background:green; color:white; padding:10px; width:100%; border:none;">Publicar Agora</button>
+    <div class="card auth-box">
+        <h3>Acessar Z-WEB</h3>
+        <button class="btn-auth google"><i class="fab fa-google"></i> Entrar com Google</button>
+        <button class="btn-auth fb"><i class="fab fa-facebook"></i> Entrar com Facebook</button>
+        <div id="admin-panel">
+            <h4 style="color:var(--accent)">Painel do Fundador</h4>
+            <input type="text" id="postImg" class="input-admin" placeholder="URL da Imagem">
+            <textarea id="postTxt" class="input-admin" placeholder="Texto da notícia..." rows="3"></textarea>
+            <button onclick="postar()" style="background:var(--accent); color:black; width:100%; padding:10px; border:none; font-weight:bold; border-radius:6px;">PUBLICAR AGORA</button>
+        </div>
     </div>
 </main>
 
 <nav>
-    <div class="nav-item active" id="n-home" onclick="showPage('home')"><i class="fas fa-home"></i>Início</div>
-    <div class="nav-item" id="n-debate" onclick="showPage('debate')"><i class="fas fa-comments"></i>Debate</div>
-    <div class="nav-item" id="n-perfil" onclick="showPage('perfil')"><i class="fas fa-user"></i>Perfil</div>
+    <div class="nav-link active" id="n-home" onclick="changePage('home')"><i class="fas fa-home"></i>Início</div>
+    <div class="nav-link" id="n-debate" onclick="changePage('debate')"><i class="fas fa-comment-dots"></i>Debate</div>
+    <div class="nav-link" id="n-perfil" onclick="changePage('perfil')"><i class="fas fa-user-circle"></i>Perfil</div>
 </nav>
 
 <script>
-    function toggleMenu() {
-        document.getElementById('side-menu').classList.toggle('active');
-        document.querySelector('.overlay').classList.toggle('active');
-    }
-
-    function showPage(id) {
+    // Menu e Navegação
+    function openMenu() { document.getElementById('side-menu').classList.add('active'); document.getElementById('overlay').classList.add('active'); }
+    function closeMenu() { document.getElementById('side-menu').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); }
+    
+    function changePage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
         document.getElementById('n-'+id).classList.add('active');
-        toggleMenu();
+        closeMenu(); window.scrollTo(0,0);
     }
 
-    function acessoDono() {
-        let pass = prompt("Senha do Fundador:");
-        if(pass === "avelino2026") {
-            showPage('perfil');
-            document.getElementById('admin-box').style.display = 'block';
-            alert("Bem-vindo, Eduardo!");
+    // Carrossel
+    let s = 0;
+    setInterval(() => { s++; if(s > 2) s = 0; document.getElementById('slider').style.transform = `translateX(-${s * 100}%)`; }, 4000);
+
+    // Admin
+    function checkAdmin() {
+        let p = prompt("Chave do Fundador:");
+        if(p === "avelino2026") {
+            changePage('perfil');
+            document.getElementById('admin-panel').style.display = 'block';
+            alert("Painel Corregedoria Ativado!");
         }
     }
-</script>
 
+    function postar() {
+        const img = document.getElementById('postImg').value;
+        const txt = document.getElementById('postTxt').value;
+        if(!txt) return;
+        const feed = document.getElementById('feed');
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `${img ? `<img src="${img}">` : ''}<div class="card-content"><div class="card-title">Notícia</div><p>${txt}</p></div>`;
+        feed.prepend(card); // Post novo no topo
+        document.getElementById('postImg').value = ""; document.getElementById('postTxt').value = "";
+    }
+</script>
 </body>
 </html>
